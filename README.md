@@ -2,7 +2,7 @@
 ## About
 Swift Class abstracts away CoreLocation and its delegates and uses NSNotification's to post updates that any class can listen too, and then request information from the class as needed.
 
-## Notification tyoes
+## Notification types
 * **initialized** - This is when the class is created
 * **foreground.start** - This is when full powered location is started
 * **foreground.stop** - This is when full powered location is stopped
