@@ -15,3 +15,15 @@ Swift Class abstracts away CoreLocation and its delegates and uses NSNotificatio
 ## To Do
 * Separate **error.deny** into another type called **error.restrict**
 * Store the error from CoreLocation
+
+## Examples:
+### Register for notifications
+```swift
+NSNotificationCenter.defaultCenter().addObserver(self, selector: "locationClassUpdated:", name: "location.updated", object: nil)
+```
+### Handle Registration for notifications
+```swift
+    @objc func locationClassUpdated(notification: NSNotification) {
+        NSLog("Location updated! %@", l.📌.debugDescription)
+    }
+```
