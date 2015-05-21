@@ -1,18 +1,11 @@
 import CoreLocation
-
-protocol WhereDelegate {
-    func locationReceived(received: CLLocation);
-    func locationError(error: NSError!);
-    func StringMessages(message: String);
-    func authDidChange(status: CLAuthorizationStatus);
-}
-
+import Foundation
 
 class 你在哪裡 : NSObject , CLLocationManagerDelegate {
     static let sharedInstance = 你在哪裡()
     var 📌💼: CLLocationManager!
     var 📌📝: String!
-    var delegate:WhereDelegate! = nil
+    var 📌: CLLocation!
     
     override init() {
         super.init()
@@ -24,6 +17,7 @@ class 你在哪裡 : NSObject , CLLocationManagerDelegate {
         📌💼 = CLLocationManager()
         📌💼.requestAlwaysAuthorization()
         📌💼.delegate = self
+        postNotification(📌📝)
     }
     
     func setAccuracy(accuracyType : Int) {
@@ -33,22 +27,27 @@ class 你在哪裡 : NSObject , CLLocationManagerDelegate {
             📌💼.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         }
     }
-
+    
+    func postNotification(message : String) {
+        NSNotificationCenter.defaultCenter().postNotificationName(message, object: nil)
+    }
+    
     func startForegroundLocation() {
         setAccuracy(0)
         NSUserDefaults.standardUserDefaults().setObject("yes", forKey: "location.foreground")
         📌💼.requestAlwaysAuthorization()
         📌💼.startUpdatingLocation()
         📌📝 = "foreground.start"
-        delegate.StringMessages(📌📝)
+        postNotification(📌📝)
     }
+    
     func stopForegroundLocation() {
         if (NSUserDefaults.standardUserDefaults().stringForKey("location.foreground") == "yes") {
             NSUserDefaults.standardUserDefaults().setObject("no", forKey: "location.foreground")
             setAccuracy(1)
             📌💼.stopUpdatingLocation()
             📌📝 = "foreground.stop"
-            delegate.StringMessages(📌📝)
+            postNotification(📌📝)
             
         }
     }
@@ -58,7 +57,7 @@ class 你在哪裡 : NSObject , CLLocationManagerDelegate {
         NSUserDefaults.standardUserDefaults().setObject("yes", forKey: "location.background")
         📌💼.startMonitoringSignificantLocationChanges()
         📌📝 = "background.start"
-        delegate.StringMessages(📌📝)
+        postNotification(📌📝)
     }
     func stopBackgroundLocation() {
         if (NSUserDefaults.standardUserDefaults().stringForKey("location.background") == "yes") {
@@ -66,15 +65,14 @@ class 你在哪裡 : NSObject , CLLocationManagerDelegate {
             setAccuracy(0)
             📌💼.stopMonitoringSignificantLocationChanges()
             📌📝 = "background.stop"
-            delegate.StringMessages(📌📝)
+            postNotification(📌📝)
         }
     }
     
     // Delegates
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         📌📝 = "error.general"
-        delegate.StringMessages(📌📝)
-        delegate.locationError(error)
+        postNotification(📌📝)
     }
 
     func locationManager(manager: CLLocationManager!,
@@ -87,20 +85,18 @@ class 你在哪裡 : NSObject , CLLocationManagerDelegate {
             }
             📌📝 = "location.updated"
             // Keep on logging if its a background location
-            delegate.locationReceived(newLocation)
-            
             NSUserDefaults.standardUserDefaults().setObject(String(format: "%2.6f", newLocation.coordinate.latitude), forKey: "loc.lat")
             NSUserDefaults.standardUserDefaults().setObject(String(format: "%2.6f", newLocation.coordinate.longitude), forKey: "loc.lng")
             NSUserDefaults.standardUserDefaults().setObject(String(format: "%2.6f", newLocation.horizontalAccuracy), forKey: "loc.acc")
-            delegate.StringMessages(📌📝)
+            📌 = newLocation
+            postNotification(📌📝)
     }
     
     func locationManager(manager: CLLocationManager!,
         didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-            delegate.authDidChange(status)
             if (status == CLAuthorizationStatus.Restricted || status == CLAuthorizationStatus.Denied) {
                 📌📝 = "error.deny"
-                delegate.StringMessages(📌📝)
+                postNotification(📌📝)
             }
     }
 }
