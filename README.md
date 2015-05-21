@@ -5,7 +5,7 @@ Swift Class abstracts away CoreLocation and its delegates and uses NSNotificatio
 ## Notification tyoes
 * **initialized** - This is when the class is created
 * **foreground.start** - This is when full powered location is started
-* **foreground.stopt** - This is when full powered location is stopped
+* **foreground.stop** - This is when full powered location is stopped
 * **background.start** - This is when full powered location is started
 * **background.stopped** - This is when full powered location is stopped
 * **error.general** - This is when the location services encounters an error (Todo: store the error so we can handle it)
