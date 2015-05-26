@@ -14,7 +14,7 @@ Swift Class abstracts away CoreLocation and its delegates and uses NSNotificatio
 
 ## To Do
 * Separate **error.deny** into another type called **error.restrict** (Issue #2)
-* Store the error from CoreLocation
+* Store the error from CoreLocation (Issue #1)
 
 ## Examples:
 ### Register for notifications
