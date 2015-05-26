@@ -13,7 +13,7 @@ Swift Class abstracts away CoreLocation and its delegates and uses NSNotificatio
 * **error.deny** - This is when the user has denied the location
 
 ## To Do
-* Separate **error.deny** into another type called **error.restrict**
+* Separate **error.deny** into another type called **error.restrict** (Issue #2)
 * Store the error from CoreLocation
 
 ## Examples:
